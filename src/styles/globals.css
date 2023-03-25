@@ -5,5 +5,5 @@
 html,
 body,
 * {
-  @apply bg-black;
+  @apply bg-black text-slate-200;
 }
