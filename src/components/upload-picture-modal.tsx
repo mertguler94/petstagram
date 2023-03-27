@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 // import { AiOutlineCloseCircle } from "react-icons/ai";
+import catWaiting from "../../public/assets/waiting.jpg";
 
 interface ViewModalPictureType {
   isOpen: boolean;
@@ -64,8 +65,8 @@ export const UploadPictureModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="h-[50vh] w-1/2 transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all sm:w-3/5 md:w-2/5">
-                <form className="flex h-full flex-col items-center justify-between bg-[#E9E9E9] py-4">
+              <Dialog.Panel className="h-[60vh] w-1/2 transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all sm:w-3/5 md:w-2/5">
+                <form className="flex h-full flex-col items-center justify-between gap-4 bg-[#E9E9E9] py-4">
                   <label
                     htmlFor="uploadFile"
                     className="flex h-12 w-96 cursor-pointer items-center justify-center border border-dashed border-black bg-white text-slate-800"
@@ -79,17 +80,20 @@ export const UploadPictureModal = ({
                     hidden
                     onChange={onSelectFile}
                   />
-                  {preview ? (
-                    <Image
-                      src={preview ?? ""}
-                      alt="Preview of uploaded picture"
-                      className="aspect-square border border-black object-cover"
-                      width={320}
-                      height={320}
-                    />
-                  ) : (
-                    <span>Loading</span>
-                  )}
+
+                  <Image
+                    src={preview ?? catWaiting}
+                    alt="Preview of uploaded picture"
+                    className="aspect-square border border-black object-cover"
+                    width={320}
+                    height={320}
+                  />
+                  <p className="bg-[#E9E9E9] text-black">
+                    {preview
+                      ? "Nice, upload this one so everyone can see my friend."
+                      : "Here, waiting for you to upload an image of a friend."}
+                  </p>
+
                   <button className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600">
                     Upload!
                   </button>

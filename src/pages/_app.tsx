@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import { type AppType } from "next/app";
 
 import { api } from "~/utils/api";
