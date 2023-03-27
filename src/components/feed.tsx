@@ -16,7 +16,7 @@ export const Feed = () => {
     setIsOpen(true);
   }
   return (
-    <div className="grid grid-cols-3 overflow-y-scroll">
+    <div className="no-scrollbar grid grid-cols-3 overflow-y-scroll">
       {mock.map((src: StaticImageData, idx) => (
         <>
           <Image

@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 html,
 body,
 * {
   @apply overscroll-none bg-black text-slate-200;
+}
+
+@layer utilities {
+  .logo {
+    font-family: "Delicious Handrawn";
+  }
 }

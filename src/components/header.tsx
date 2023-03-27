@@ -5,13 +5,12 @@ export const Header = () => {
   console.log(user);
 
   return (
-    <div className="flex justify-between border-b-[1px] border-slate-100 p-4">
+    <div className="flex items-center justify-between border-b-[1px] border-slate-100 p-4">
       <span>{user?.username ?? ""}</span>
-      {isSignedIn && (
-        <button className="h-6 w-6 rounded-lg bg-slate-300 text-slate-800 hover:bg-slate-400">
-          +
-        </button>
-      )}
+      <h2 className="logo text-3xl">
+        <span className="text-blue-300">pet</span>stagram
+      </h2>
+
       {!isSignedIn ? <SignInButton /> : <SignOutButton />}
     </div>
   );
