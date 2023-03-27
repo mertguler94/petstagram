@@ -4,8 +4,6 @@ import { UploadPictureModal } from "./upload-picture-modal";
 
 export const Footer = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser();
-  console.log(user);
-
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {

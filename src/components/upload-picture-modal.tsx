@@ -1,8 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
-// import { AiOutlineCloseCircle } from "react-icons/ai";
 import catWaiting from "../../public/assets/waiting.jpg";
+import { api } from "~/utils/api";
+import { Readable } from "stream";
 
 interface ViewModalPictureType {
   isOpen: boolean;
@@ -13,6 +14,23 @@ export const UploadPictureModal = ({
   isOpen,
   closeModal,
 }: ViewModalPictureType) => {
+  // const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+  //     onSuccess: () => {
+  //       setInput("");
+  //       void ctx.posts.getAll.invalidate();
+  //     },
+  //     onError: (e) => {
+  //       const errorMessage = e.data?.zodError?.fieldErrors.content;
+  //       if (errorMessage && errorMessage[0]) {
+  //         toast.error(errorMessage[0]);
+  //       } else {
+  //         toast.error("Failed to post! Please try again later.");
+  //       }
+  //     },
+  //   });
+
+  const { mutate } = api.image.test.useMutation();
+
   const [preview, setPreview] = useState<string | undefined>();
   const [selectedFile, setSelectedFile] = useState<File>();
 
@@ -35,9 +53,21 @@ export const UploadPictureModal = ({
       setSelectedFile(undefined);
       return;
     }
-
     setSelectedFile(e.target.files[0]);
   };
+
+  function handleUpload() {
+    if (!selectedFile) return;
+
+    // selectedFile
+    //   .arrayBuffer()
+    //   .then((bufferArray) => Buffer.from(bufferArray))
+    //   .then((array) => Readable.from(array))
+    //   .then((file) => mutate({ file }))
+    //   .catch(console.error);
+    // const file = Buffer.from(bufferArray);
+    mutate({ file: selectedFile.toString() });
+  }
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -94,7 +124,10 @@ export const UploadPictureModal = ({
                       : "Here, waiting for you to upload an image of a friend."}
                   </p>
 
-                  <button className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600">
+                  <button
+                    className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600"
+                    onClick={handleUpload}
+                  >
                     Upload!
                   </button>
                 </form>

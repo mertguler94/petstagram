@@ -2,7 +2,7 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 
 export const Header = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser();
-  console.log(user);
+  // console.log(user);
 
   return (
     <div className="flex items-center justify-between border-b-[1px] border-slate-100 p-4">

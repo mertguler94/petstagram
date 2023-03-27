@@ -18,17 +18,16 @@ export const Feed = () => {
   return (
     <div className="no-scrollbar grid grid-cols-3 overflow-y-scroll">
       {mock.map((src: StaticImageData, idx) => (
-        <>
+        <div key={idx}>
           <Image
             className="aspect-square cursor-pointer border border-black object-cover"
-            key={idx}
             src={src}
             alt="Pet"
             onClick={openModal}
           />
 
           <ViewModalPicture isOpen={isOpen} closeModal={closeModal} src={src} />
-        </>
+        </div>
       ))}
     </div>
   );
