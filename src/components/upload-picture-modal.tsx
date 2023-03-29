@@ -2,8 +2,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import catWaiting from "../../public/assets/waiting.jpg";
-import { api } from "~/utils/api";
-import { Readable } from "stream";
 
 interface ViewModalPictureType {
   isOpen: boolean;
@@ -29,7 +27,7 @@ export const UploadPictureModal = ({
   //     },
   //   });
 
-  const { mutate } = api.image.test.useMutation();
+  // const { mutate } = api.image.test.useMutation();
 
   const [preview, setPreview] = useState<string | undefined>();
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -69,12 +67,18 @@ export const UploadPictureModal = ({
     // mutate({ file: selectedFile.toString() });
 
     const data = new FormData();
-    data.append("file", selectedFile);
-    fetch("/api/image", {
-      method: "POST",
-      body: { data },
-    })
-      .then((res) => console.log(res))
+    selectedFile
+      .arrayBuffer()
+      .then((fileArrayBuffer) => {
+        const fileBuffer = Buffer.from(fileArrayBuffer);
+        data.append("file", selectedFile);
+        fetch("/api/image", {
+          method: "POST",
+          body: fileBuffer,
+        })
+          .then((res) => console.log(res))
+          .catch(console.error);
+      })
       .catch(console.error);
   }
 
@@ -104,7 +108,7 @@ export const UploadPictureModal = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="h-[60vh] w-1/2 transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all sm:w-3/5 md:w-2/5">
+              <Dialog.Panel className="h-[500px] w-1/2 transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all sm:w-3/5 md:w-2/5">
                 <form className="flex h-full flex-col items-center justify-between gap-4 bg-[#E9E9E9] py-4">
                   <label
                     htmlFor="uploadFile"

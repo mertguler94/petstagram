@@ -1,26 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import type { NextApiRequest, NextApiResponse } from "next";
-import BoxSDK from "box-node-sdk";
+import uploadcare, {
+  UploadcareSimpleAuthSchema,
+} from "@uploadcare/rest-client";
+import { base } from "@uploadcare/upload-client";
 
-const clientID = process.env.STORAGE_CLIENT_ID;
-const clientSecret = process.env.STORAGE_CLIENT_SECRET;
-
-const sdk = new BoxSDK({
-  clientID,
-  clientSecret,
-});
-
-const boxClient = sdk.getAppAuthClient("enterprise", "petstagram");
-
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    data: FormData;
-  };
+interface NextApiRequestExtended extends NextApiRequest {
+  body: Buffer;
 }
 
+// const clientID = process.env.STORAGE_CLIENT_ID;
+// const clientSecret = process.env.STORAGE_CLIENT_SECRET;
+const publicKey = process.env.NEXT_PUBLIC_UPLOAD;
+const secretKey = process.env.UPLOADCARE_SECRET;
+if (!publicKey || !secretKey) throw new Error("key not found");
+
+const uploadcareSimpleAuthSchema = new UploadcareSimpleAuthSchema({
+  publicKey,
+  secretKey,
+});
+
 export default async function handler(
-  req: ExtendedNextApiRequest,
+  req: NextApiRequestExtended,
   res: NextApiResponse
 ) {
   if (req.method !== "POST") {
@@ -28,23 +29,17 @@ export default async function handler(
     return;
   }
 
-  const { data } = req.body;
-  console.log(data);
+  if (!publicKey) return;
 
-  const file = data.get("file");
+  const fileData = req.body;
 
-  if (!file) {
-    return res.status(400).send("not found");
-  }
-  const image = file as File;
-  const bufferArray = await image.arrayBuffer();
-  const bufferImage = Buffer.from(bufferArray);
+  const resp = await base(fileData, { publicKey, store: "auto" });
 
-  const resp = await boxClient.files.uploadFile(
-    "1",
-    Date.now().toString(),
-    bufferImage
-  );
-
-  res.status(200).json(resp);
+  res.status(200).send(resp);
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
