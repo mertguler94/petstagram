@@ -66,7 +66,16 @@ export const UploadPictureModal = ({
     //   .then((file) => mutate({ file }))
     //   .catch(console.error);
     // const file = Buffer.from(bufferArray);
-    mutate({ file: selectedFile.toString() });
+    // mutate({ file: selectedFile.toString() });
+
+    const data = new FormData();
+    data.append("file", selectedFile);
+    fetch("/api/image", {
+      method: "POST",
+      body: { data },
+    })
+      .then((res) => console.log(res))
+      .catch(console.error);
   }
 
   return (
