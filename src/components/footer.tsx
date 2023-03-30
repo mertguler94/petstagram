@@ -15,7 +15,7 @@ export const Footer = () => {
   }
 
   return (
-    <div className="flex items-center justify-center border-b-[1px] border-slate-100 p-4">
+    <div className="flex items-center justify-center border border-slate-100 p-4">
       {isSignedIn && (
         <>
           <button
