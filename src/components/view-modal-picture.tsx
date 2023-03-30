@@ -1,12 +1,12 @@
 import { Dialog, Transition } from "@headlessui/react";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import { Fragment } from "react";
 // import { AiOutlineCloseCircle } from "react-icons/ai";
 
 interface ViewModalPictureType {
   isOpen: boolean;
   closeModal: () => void;
-  src: StaticImageData;
+  src: string;
 }
 
 export const ViewModalPicture = ({
@@ -40,15 +40,13 @@ export const ViewModalPicture = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="h-[90vh] w-4/5 transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all sm:w-3/5 md:w-2/5">
-                <Image src={src} alt="Pet photo" className=" rounded-2xl" />
-                {/* <button
-                  type="button"
-                  onClick={closeModal}
-                  className="absolute top-8 right-4 cursor-pointer bg-transparent text-white focus:outline-none"
-                >
-                  <AiOutlineCloseCircle size={36} />
-                </button> */}
+              <Dialog.Panel className="relative h-[60vh] w-full transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all">
+                <Image
+                  src={src}
+                  alt="Pet photo"
+                  className="rounded-2xl object-cover"
+                  fill
+                />
               </Dialog.Panel>
             </Transition.Child>
           </div>

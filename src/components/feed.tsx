@@ -1,9 +1,9 @@
-import Image, { type StaticImageData } from "next/image";
-import cat from "../../public/assets/cat.webp";
+import Image from "next/image";
 import { useState } from "react";
 import { ViewModalPicture } from "./view-modal-picture";
-
-const mock = new Array(20).fill(cat);
+import { api } from "~/utils/api";
+import { Spinner } from "./spinner";
+import { FeedItem } from "./feed-item";
 
 export const Feed = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,20 +15,20 @@ export const Feed = () => {
   function openModal() {
     setIsOpen(true);
   }
-  return (
-    <div className="no-scrollbar grid grid-cols-3 overflow-y-scroll">
-      {mock.map((src: StaticImageData, idx) => (
-        <div key={idx}>
-          <Image
-            className="aspect-square cursor-pointer border border-black object-cover"
-            src={src}
-            alt="Pet"
-            onClick={openModal}
-          />
 
-          <ViewModalPicture isOpen={isOpen} closeModal={closeModal} src={src} />
-        </div>
-      ))}
+  const { data: images, isLoading: isImagesLoading } =
+    api.image.getAll.useQuery();
+
+  if (isImagesLoading) return <Spinner />;
+  if (!images) return <div>Something went wrong</div>;
+
+  return (
+    <div className="h-full">
+      <div className="no-scrollbar grid grid-cols-3 overflow-y-scroll">
+        {images.map((image) => (
+          <FeedItem key={image.id} {...image} />
+        ))}
+      </div>
     </div>
   );
 };
