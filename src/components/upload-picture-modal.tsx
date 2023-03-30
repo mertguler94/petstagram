@@ -137,6 +137,7 @@ export const UploadPictureModal = ({
                     <button
                       className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600"
                       onClick={(e) => void handleUpload(e)}
+                      disabled={isPosting}
                     >
                       Upload!
                     </button>
