@@ -23,8 +23,8 @@ export const Feed = () => {
   if (!images) return <div>Something went wrong</div>;
 
   return (
-    <div className="h-full">
-      <div className="no-scrollbar grid grid-cols-3 overflow-y-scroll">
+    <div className="no-scrollbar h-full overflow-y-scroll">
+      <div className=" grid grid-cols-3">
         {images.map((image) => (
           <FeedItem key={image.id} {...image} />
         ))}
