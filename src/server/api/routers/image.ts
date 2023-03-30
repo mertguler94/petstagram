@@ -7,8 +7,9 @@ import {
 } from "~/server/api/trpc";
 
 export const imageRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.post.findMany();
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.prisma.post.findMany();
+    return posts.reverse();
   }),
 
   savePost: privateProcedure
