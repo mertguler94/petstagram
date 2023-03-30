@@ -33,6 +33,7 @@ export const UploadPictureModal = ({
 
   const [preview, setPreview] = useState<string | undefined>();
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -62,6 +63,7 @@ export const UploadPictureModal = ({
     e.preventDefault();
     if (!selectedFile || !publicKey) return;
 
+    setIsUploading(true);
     const result = await uploadFile(selectedFile, {
       publicKey,
       store: "auto",
@@ -73,6 +75,8 @@ export const UploadPictureModal = ({
     if (!result.cdnUrl) return;
 
     mutateImage({ postUrl: result.cdnUrl });
+    setSelectedFile(undefined);
+    setIsUploading(false);
   }
 
   return (
@@ -135,9 +139,9 @@ export const UploadPictureModal = ({
                     </p>
 
                     <button
-                      className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600"
+                      className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600 disabled:cursor-not-allowed disabled:bg-slate-400"
                       onClick={(e) => void handleUpload(e)}
-                      disabled={isPosting}
+                      disabled={isUploading}
                     >
                       Upload!
                     </button>

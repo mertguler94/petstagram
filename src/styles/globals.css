@@ -15,9 +15,8 @@
 }
 
 html,
-body,
-* {
-  @apply overscroll-none bg-black text-slate-200;
+body {
+  @apply overscroll-none  text-slate-200;
 }
 
 :root {

@@ -28,11 +28,7 @@ export const FeedItem = (image: Post) => {
         onClick={openModal}
         fill
       />
-      <ViewModalPicture
-        isOpen={isOpen}
-        closeModal={closeModal}
-        src={image.postUrl}
-      />
+      <ViewModalPicture isOpen={isOpen} closeModal={closeModal} src={image} />
     </div>
   );
 };

@@ -8,8 +8,13 @@ import {
 
 export const imageRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.prisma.post.findMany();
-    return posts.reverse();
+    return ctx.prisma.post.findMany({
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+    });
   }),
 
   savePost: privateProcedure

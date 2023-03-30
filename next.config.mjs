@@ -19,7 +19,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["ucarecdn.com"],
+    domains: ["ucarecdn.com", "images.clerk.dev"],
   },
 };
 export default config;

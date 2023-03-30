@@ -1,19 +1,27 @@
+import { useUser } from "@clerk/nextjs";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import { Fragment } from "react";
-// import { AiOutlineCloseCircle } from "react-icons/ai";
+import { type RouterOutputs, api } from "~/utils/api";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 interface ViewModalPictureType {
   isOpen: boolean;
   closeModal: () => void;
-  src: string;
+  src: Post;
 }
+
+type Post = RouterOutputs["image"]["getAll"][0];
 
 export const ViewModalPicture = ({
   isOpen,
   closeModal,
   src,
 }: ViewModalPictureType) => {
+  const { data: userData } = api.user.getUserWithUserId.useQuery({
+    userId: src.userId,
+  });
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -40,13 +48,36 @@ export const ViewModalPicture = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="relative h-[60vh] w-full transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all">
-                <Image
-                  src={src}
-                  alt="Pet photo"
-                  className="rounded-2xl object-cover"
-                  fill
+              <Dialog.Panel className="relative transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all">
+                <AiOutlineCloseCircle
+                  className="absolute right-4 top-4 cursor-pointer text-slate-700"
+                  size={20}
+                  onClick={closeModal}
                 />
+                <div className="flex flex-col gap-10 p-6 pt-12">
+                  <Image
+                    src={src.postUrl}
+                    alt="Pet photo"
+                    className="rounded-2xl object-cover"
+                    width={450}
+                    height={450}
+                  />
+                  <div className="flex justify-between text-slate-800">
+                    <div className="flex items-center gap-2">
+                      {userData?.profileImageUrl && (
+                        <Image
+                          src={userData?.profileImageUrl}
+                          alt="profile image"
+                          width={50}
+                          height={50}
+                          className="rounded-full"
+                        />
+                      )}
+                      <h4>{userData?.username}</h4>
+                    </div>
+                    <p className="text-sm">{src.createdAt.toLocaleString()}</p>
+                  </div>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
