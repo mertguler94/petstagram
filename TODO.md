@@ -1,12 +1,9 @@
 # Important features to add ASAP
 
-- find a free storage service
-- create an endpoint for uploading images
-- assign the endpoint to the button on the header
-- create an endpoint for getting all images, probably with a limit
-- render all of the images in the home screen
-
+- add limit for getting all images
 - arrange header for a more suitable design, with username, profile pic.
+- decrease the quality of the images before uploading.
+- delete functionality, both from uploadcare and database
 
 # Future ideas
 
