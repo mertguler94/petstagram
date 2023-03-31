@@ -14,6 +14,7 @@ export const imageRouter = createTRPCRouter({
           createdAt: "desc",
         },
       ],
+      take: 99,
     });
   }),
 
