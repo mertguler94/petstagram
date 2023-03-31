@@ -1,6 +1,19 @@
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren, useEffect } from "react";
 
 export const Layout = (props: PropsWithChildren) => {
+  const setViewHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  };
+
+  useEffect(() => {
+    setViewHeight();
+    window.addEventListener("resize", setViewHeight);
+    return () => {
+      window.removeEventListener("resize", setViewHeight);
+    };
+  }, []);
+
   return (
     <div className="absolute inset-0">
       <main className="flex h-screen justify-center overflow-hidden bg-gradient-to-br from-[#000000]  to-[#434343]">
