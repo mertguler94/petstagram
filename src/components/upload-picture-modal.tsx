@@ -23,6 +23,7 @@ export const UploadPictureModal = ({
     api.image.savePost.useMutation({
       onSuccess: () => {
         void ctx.image.getAll.invalidate();
+        void ctx.image.getPostsByUserId.invalidate();
         closeModal();
       },
       onError: (e) => {

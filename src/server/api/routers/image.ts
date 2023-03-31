@@ -30,4 +30,20 @@ export const imageRouter = createTRPCRouter({
         data: postData,
       });
     }),
+
+  getPostsByUserId: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.post.findMany({
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        take: 99,
+        where: {
+          userId: input.userId,
+        },
+      });
+    }),
 });

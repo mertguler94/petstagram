@@ -1,13 +1,19 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { Logo } from "./logo";
+import { useRouter } from "next/router";
 
 export const Header = () => {
   const { isLoaded: userLoaded, isSignedIn, user } = useUser();
-  // console.log(user);
+
+  const router = useRouter();
 
   return (
     <div className="flex items-center justify-between border-b-[1px] border-slate-100 p-4">
-      <div className="flex items-center gap-2">
+      <div
+        className="flex cursor-pointer items-center gap-2"
+        onClick={() => void router.push(`/user/${user?.id ?? ""}`)}
+      >
         {user?.profileImageUrl && (
           <Image
             src={user?.profileImageUrl}
@@ -19,9 +25,7 @@ export const Header = () => {
         )}
         <span>{(user?.username || user?.fullName) ?? ""}</span>
       </div>
-      <h2 className="logo text-3xl">
-        <span className="text-blue-300">pet</span>stagram
-      </h2>
+      <Logo link />
 
       {!isSignedIn ? <SignInButton /> : <SignOutButton />}
     </div>

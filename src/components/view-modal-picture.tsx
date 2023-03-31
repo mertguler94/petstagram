@@ -3,6 +3,12 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { type RouterOutputs, api } from "~/utils/api";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { getFullName } from "~/helpers/get-full-name";
+import { useRouter } from "next/router";
+
+dayjs.extend(relativeTime);
 
 interface ViewModalPictureType {
   isOpen: boolean;
@@ -20,6 +26,8 @@ export const ViewModalPicture = ({
   const { data: userData } = api.user.getUserWithUserId.useQuery({
     userId: src.userId,
   });
+
+  const router = useRouter();
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -61,8 +69,13 @@ export const ViewModalPicture = ({
                     width={450}
                     height={450}
                   />
-                  <div className="flex justify-between text-slate-800">
-                    <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between text-slate-800">
+                    <div
+                      className="flex cursor-pointer items-center gap-2"
+                      onClick={() =>
+                        void router.push(`/user/${userData?.id ?? ""}`)
+                      }
+                    >
                       {userData?.profileImageUrl && (
                         <Image
                           src={userData?.profileImageUrl}
@@ -72,9 +85,9 @@ export const ViewModalPicture = ({
                           className="rounded-full"
                         />
                       )}
-                      <h4>{userData?.username}</h4>
+                      <h4>{userData?.username ?? getFullName(userData)}</h4>
                     </div>
-                    <p className="text-sm">{src.createdAt.toLocaleString()}</p>
+                    <p className="text-sm">{dayjs(src.createdAt).fromNow()}</p>
                   </div>
                   {src.caption && <p className="text-black">{src.caption}</p>}
                 </div>
