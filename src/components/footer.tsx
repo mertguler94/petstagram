@@ -3,7 +3,7 @@ import { useState } from "react";
 import { UploadPictureModal } from "./upload-picture-modal";
 
 export const Footer = () => {
-  const { isLoaded: userLoaded, isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
