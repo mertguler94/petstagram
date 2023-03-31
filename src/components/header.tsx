@@ -9,7 +9,7 @@ export const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-between border-b-[1px] border-slate-100 p-4">
+    <div className="grid grid-cols-3 border-b-[1px] border-slate-100 p-4">
       <div
         className="flex cursor-pointer items-center gap-2"
         onClick={() => void router.push(`/user/${user?.id ?? ""}`)}
@@ -25,9 +25,19 @@ export const Header = () => {
         )}
         <span>{(user?.username || user?.fullName) ?? ""}</span>
       </div>
-      <Logo link />
+      <div className="self-center justify-self-center">
+        <Logo link />
+      </div>
 
-      {!isSignedIn ? <SignInButton /> : <SignOutButton />}
+      {!isSignedIn ? (
+        <div className="self-center justify-self-end">
+          <SignInButton />
+        </div>
+      ) : (
+        <div className="self-center justify-self-end">
+          <SignOutButton />
+        </div>
+      )}
     </div>
   );
 };

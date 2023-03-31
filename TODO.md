@@ -6,5 +6,4 @@
 ## Future ideas
 
 - infinite scroll
-- allow people to write their pets name
 - like feature
