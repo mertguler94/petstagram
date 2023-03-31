@@ -64,7 +64,7 @@ const ProfilePage: NextPage<{ userId: string }> = ({ userId }) => {
         <title>{getFullName(userData) || "Profile Page"}</title>
       </Head>
       <Layout>
-        <div className="flex flex-col items-center justify-center gap-3 py-6">
+        <div className="flex flex-col items-center justify-center gap-3 border-b py-6">
           <Image
             src={userData.profileImageUrl}
             alt={`${getFullName(userData)}'s profile`}

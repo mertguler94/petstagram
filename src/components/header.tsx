@@ -10,27 +10,29 @@ export const Header = () => {
 
   return (
     <div className="grid grid-cols-3 border-b-[1px] border-slate-100 p-4">
-      <div
-        className="flex cursor-pointer items-center gap-2"
-        onClick={() => void router.push(`/user/${user?.id ?? ""}`)}
-      >
-        {user?.profileImageUrl && (
-          <Image
-            src={user?.profileImageUrl}
-            alt="Your profile picture"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-        )}
-        <span>{(user?.username || user?.fullName) ?? ""}</span>
-      </div>
-      <div className="self-center justify-self-center">
+      {isSignedIn && (
+        <div
+          className="flex cursor-pointer items-center gap-2"
+          onClick={() => void router.push(`/user/${user?.id ?? ""}`)}
+        >
+          {user?.profileImageUrl && (
+            <Image
+              src={user?.profileImageUrl}
+              alt="Your profile picture"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          )}
+          <span>{(user?.username || user?.fullName) ?? ""}</span>
+        </div>
+      )}
+      <div className="col-start-2 col-end-2 self-center justify-self-center">
         <Logo link />
       </div>
 
       {!isSignedIn ? (
-        <div className="self-center justify-self-end">
+        <div className="self-center justify-self-end ">
           <SignInButton />
         </div>
       ) : (
