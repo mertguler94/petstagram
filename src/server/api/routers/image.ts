@@ -19,9 +19,13 @@ export const imageRouter = createTRPCRouter({
   }),
 
   savePost: privateProcedure
-    .input(z.object({ postUrl: z.string() }))
+    .input(z.object({ postUrl: z.string(), caption: z.string() }))
     .mutation(({ ctx, input }) => {
-      const postData = { postUrl: input.postUrl, userId: ctx.userId };
+      const postData = {
+        postUrl: input.postUrl,
+        caption: input.caption,
+        userId: ctx.userId,
+      };
       return ctx.prisma.post.create({
         data: postData,
       });

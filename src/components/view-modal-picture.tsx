@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/nextjs";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import { Fragment } from "react";
@@ -54,7 +53,7 @@ export const ViewModalPicture = ({
                   size={20}
                   onClick={closeModal}
                 />
-                <div className="flex flex-col gap-10 p-6 pt-12">
+                <div className="flex flex-col gap-4 p-6 pt-12">
                   <Image
                     src={src.postUrl}
                     alt="Pet photo"
@@ -77,6 +76,7 @@ export const ViewModalPicture = ({
                     </div>
                     <p className="text-sm">{src.createdAt.toLocaleString()}</p>
                   </div>
+                  {src.caption && <p className="text-black">{src.caption}</p>}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

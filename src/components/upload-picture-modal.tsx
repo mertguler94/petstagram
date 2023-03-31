@@ -34,6 +34,7 @@ export const UploadPictureModal = ({
   const [preview, setPreview] = useState<string | undefined>();
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isUploading, setIsUploading] = useState(false);
+  const [caption, setCaption] = useState("");
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
@@ -74,8 +75,9 @@ export const UploadPictureModal = ({
 
     if (!result.cdnUrl) return;
 
-    mutateImage({ postUrl: result.cdnUrl });
+    mutateImage({ postUrl: result.cdnUrl, caption });
     setSelectedFile(undefined);
+    setCaption("");
     setIsUploading(false);
   }
 
@@ -132,11 +134,18 @@ export const UploadPictureModal = ({
                       width={320}
                       height={320}
                     />
-                    <p className="bg-[#E9E9E9] text-black">
+                    <p className="bg-[#E9E9E9] text-sm text-black">
                       {preview
                         ? "Nice, upload this one so everyone can see my friend."
                         : "Here, waiting for you to upload an image of a friend."}
                     </p>
+
+                    <textarea
+                      placeholder="Write a caption."
+                      className="h-16 w-full p-2 text-black"
+                      value={caption}
+                      onChange={(e) => setCaption(e.currentTarget.value)}
+                    />
 
                     <button
                       className=" w-1/2 rounded-xl bg-slate-800 p-2 hover:bg-slate-600 disabled:cursor-not-allowed disabled:bg-slate-400"
