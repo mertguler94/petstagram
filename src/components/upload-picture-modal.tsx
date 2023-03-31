@@ -108,11 +108,11 @@ export const UploadPictureModal = ({
               {isPosting ? (
                 <Spinner />
               ) : (
-                <Dialog.Panel className="h-[500px] w-1/2 transform overflow-hidden rounded-2xl bg-[#E9E9E9] text-left align-middle shadow-xl transition-all sm:w-3/5 md:w-2/5">
+                <Dialog.Panel className="min-h-[500px] w-full transform overflow-hidden rounded-2xl bg-[#E9E9E9] px-10 py-6 text-left align-middle shadow-xl transition-all lg:w-1/2">
                   <form className="flex h-full flex-col items-center justify-between gap-4 bg-[#E9E9E9] py-4">
                     <label
                       htmlFor="uploadFile"
-                      className="flex h-12 w-96 cursor-pointer items-center justify-center border border-dashed border-black bg-white text-slate-800"
+                      className="flex w-full cursor-pointer items-center justify-center border border-dashed border-black bg-white p-3 text-center text-slate-800 lg:w-96"
                     >
                       Click here to select a lovely image of your pet!
                     </label>
@@ -139,7 +139,7 @@ export const UploadPictureModal = ({
                     </p>
 
                     <button
-                      className=" w-1/3 rounded-xl bg-slate-800 p-2 hover:bg-slate-600 disabled:cursor-not-allowed disabled:bg-slate-400"
+                      className=" w-1/2 rounded-xl bg-slate-800 p-2 hover:bg-slate-600 disabled:cursor-not-allowed disabled:bg-slate-400"
                       onClick={(e) => void handleUpload(e)}
                       disabled={isUploading}
                     >
