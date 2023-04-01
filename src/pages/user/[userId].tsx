@@ -9,6 +9,8 @@ import { Logo } from "~/components/logo";
 import { Spinner } from "~/components/spinner";
 import { FeedItem } from "~/components/feed-item";
 import { type DehydrateOptions } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 
 const ProfileFeed = ({ userId }: { userId: string }) => {
   const { data: images, isLoading: isImagesLoading } =
@@ -38,6 +40,24 @@ const ProfilePage: NextPage<{ userId: string }> = ({ userId }) => {
     userId,
   });
 
+  const { mutate: mutateBio, isLoading: isBioSaving } =
+    api.user.saveBio.useMutation({
+      onError: (e) => {
+        const errorMessage = e.data?.zodError?.fieldErrors.content;
+        console.error(errorMessage);
+      },
+    });
+
+  const currentUser = useUser();
+
+  const [showSave, setShowSave] = useState(false);
+  const [bio, setBio] = useState("");
+  const bioInput = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    setBio(userData?.privateMetadata.customBio as string);
+  }, [userData?.privateMetadata.customBio]);
+
   if (!userData)
     return (
       <>
@@ -64,15 +84,65 @@ const ProfilePage: NextPage<{ userId: string }> = ({ userId }) => {
         <title>{getFullName(userData) || "Profile Page"}</title>
       </Head>
       <Layout>
-        <div className="flex flex-col items-center justify-center gap-3 border-b py-6">
-          <Image
-            src={userData.profileImageUrl}
-            alt={`${getFullName(userData)}'s profile`}
-            className="rounded-full"
-            width={140}
-            height={140}
-          />
-          <h2 className="text-2xl">{getFullName(userData)}</h2>
+        <div className="flex flex-col items-center justify-center gap-3 border-b pt-6 pb-3">
+          <div className="relative aspect-square w-24 md:w-40">
+            <Image
+              src={userData.profileImageUrl}
+              alt={`${getFullName(userData)}'s profile`}
+              className="relative rounded-full"
+              fill
+            />
+          </div>
+          <div className="flex w-full flex-col items-center justify-center">
+            <h2 className="text-xl sm:text-2xl">{getFullName(userData)}</h2>
+            <fieldset className="flex w-full items-center justify-center gap-4 px-4">
+              <textarea
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+                spellCheck={false}
+                ref={bioInput}
+                className={`w-full ${
+                  currentUser.user && userData.id === currentUser.user.id
+                    ? "cursor-pointer"
+                    : "cursor-default"
+                } resize-none bg-transparent px-3 py-2 text-center text-xs text-slate-400 focus:cursor-text sm:text-sm`}
+                placeholder="Enter your bio."
+                onFocus={() => setShowSave(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowSave(false), 100);
+                }}
+                value={bio}
+                disabled={
+                  !currentUser.user
+                    ? false
+                    : userData.id !== currentUser.user.id
+                }
+                onChange={(e) => {
+                  setBio(e.currentTarget.value);
+                  if (!bioInput.current) return;
+                  // auto adjust height of the textarea input
+                  bioInput.current.style.height = "auto";
+                  bioInput.current.style.height =
+                    bioInput.current.scrollHeight.toString() + "px";
+                }}
+              />
+              {showSave &&
+                currentUser.user &&
+                userData.id === currentUser.user.id && (
+                  <button
+                    type="button"
+                    className="rounded-md border p-2"
+                    disabled={isBioSaving}
+                    onClick={() =>
+                      mutateBio({ userId: currentUser.user.id, bio })
+                    }
+                  >
+                    Save
+                  </button>
+                )}
+            </fieldset>
+          </div>
         </div>
         <ProfileFeed userId={userId} />
       </Layout>
