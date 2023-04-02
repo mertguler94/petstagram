@@ -37,6 +37,7 @@ export const ViewModalPicture = ({
     api.image.likeToggle.useMutation({
       onSuccess: () => {
         void ctx.image.getAll.invalidate();
+        void ctx.image.getPostsByUserId.invalidate();
       },
       onError: (e) => {
         const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -48,7 +49,7 @@ export const ViewModalPicture = ({
   const [likeAnimation, setLikeAnimation] = useState(false);
   const [likeNumber, setLikeNumber] = useState(0);
 
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
 
   const router = useRouter();
 
@@ -157,30 +158,39 @@ export const ViewModalPicture = ({
                     </div>
                     <p className="text-sm">{dayjs(src.createdAt).fromNow()}</p>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div
+                    className={`flex items-center ${
+                      src.caption ? "justify-between" : "justify-end"
+                    }`}
+                  >
                     {src.caption && <p className="text-black">{src.caption}</p>}
-                    <span className="text-slate-800">{`${likeNumber} likes`}</span>
-                    {like ? (
-                      <IoPawSharp
-                        size={36}
-                        className="cursor-pointer rounded-full border border-red-400 p-1 text-red-700 hover:text-red-500"
-                        onClick={
-                          !isLikeLoading
-                            ? () => setLike((prev) => !prev)
-                            : undefined
-                        }
-                      />
-                    ) : (
-                      <IoPawOutline
-                        size={36}
-                        className="cursor-pointer rounded-full border border-red-400 p-1 text-red-700  hover:text-red-500"
-                        onClick={
-                          !isLikeLoading
-                            ? () => setLike((prev) => !prev)
-                            : undefined
-                        }
-                      />
-                    )}
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-bold text-slate-800">{`${likeNumber} ${
+                        likeNumber === 0 || likeNumber === 1 ? "like" : "likes"
+                      }`}</span>
+                      {isSignedIn &&
+                        (like ? (
+                          <IoPawSharp
+                            size={36}
+                            className="cursor-pointer rounded-full border border-red-400 p-1 text-red-700 hover:text-red-500"
+                            onClick={
+                              !isLikeLoading
+                                ? () => setLike((prev) => !prev)
+                                : undefined
+                            }
+                          />
+                        ) : (
+                          <IoPawOutline
+                            size={36}
+                            className="cursor-pointer rounded-full border border-red-400 p-1 text-red-700  hover:text-red-500"
+                            onClick={
+                              !isLikeLoading
+                                ? () => setLike((prev) => !prev)
+                                : undefined
+                            }
+                          />
+                        ))}
+                    </div>
                   </div>
                 </div>
               </Dialog.Panel>

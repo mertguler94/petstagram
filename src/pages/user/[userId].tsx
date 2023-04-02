@@ -36,9 +36,10 @@ const ProfileFeed = ({ userId }: { userId: string }) => {
 };
 
 const ProfilePage: NextPage<{ userId: string }> = ({ userId }) => {
-  const { data: userData } = api.user.getUserWithUserId.useQuery({
-    userId,
-  });
+  const { data: userData, isLoading: isUserLoading } =
+    api.user.getUserWithUserId.useQuery({
+      userId,
+    });
 
   const { mutate: mutateBio, isLoading: isBioSaving } =
     api.user.saveBio.useMutation({
@@ -57,6 +58,13 @@ const ProfilePage: NextPage<{ userId: string }> = ({ userId }) => {
   useEffect(() => {
     setBio(userData?.privateMetadata.customBio as string);
   }, [userData?.privateMetadata.customBio]);
+
+  if (isUserLoading)
+    return (
+      <div className=" no-scrollbar flex h-full items-center justify-center overflow-y-scroll">
+        <Spinner />
+      </div>
+    );
 
   if (!userData)
     return (

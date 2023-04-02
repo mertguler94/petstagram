@@ -19,7 +19,7 @@ export const userRouter = createTRPCRouter({
 
       if (!userData) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: "NOT_FOUND",
           message: "User not found",
         });
       }
@@ -29,12 +29,18 @@ export const userRouter = createTRPCRouter({
 
   saveBio: privateProcedure
     .input(z.object({ userId: z.string(), bio: z.string() }))
-    .mutation(async ({ input }) => {
-      const userData = await clerkClient.users.getUser(input.userId);
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.userId !== input.userId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Method called from not logged in user",
+        });
+      }
 
+      const userData = await clerkClient.users.getUser(input.userId);
       if (!userData) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: "NOT_FOUND",
           message: "User not found",
         });
       }
