@@ -14,7 +14,31 @@ const config = {
       full: "100%",
       screen: "calc(var(--vh) * 100)",
     }),
-    extend: {},
+
+    extend: {
+      keyframes: {
+        like: {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "14%": {
+            transform: "scale(1.3)",
+          },
+          "28%": {
+            transform: "scale(1)",
+          },
+          "42%": {
+            transform: "scale(1.3)",
+          },
+          "70%": {
+            transform: "scale(1)",
+          },
+        },
+      },
+      animation: {
+        like: "like 1s ease-in-out",
+      },
+    },
   },
   plugins: [],
 };

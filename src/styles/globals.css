@@ -17,6 +17,14 @@
     height: 100vh; /* Fallback for browsers that do not support Custom Properties */
     height: calc(var(--vh, 1vh) * 100);
   }
+
+  .grid-column-1 {
+    grid-column: 1;
+  }
+
+  .grid-row-1 {
+    grid-row: 1;
+  }
 }
 
 html,
