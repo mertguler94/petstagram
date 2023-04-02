@@ -32,11 +32,13 @@ export const FeedItem = (image: Post) => {
         onClick={openModal}
         fill
       />
-      <div className="pointer-events-none z-10 flex items-end justify-end gap-2 bg-gradient-to-t from-black to-transparent px-3 py-2 opacity-60">
-        <BsHeart />
-        <span className="z-20 cursor-default text-sm text-white">
-          {peopleLiked.length}
-        </span>
+      <div className="pointer-events-none z-10 flex items-end justify-end bg-gradient-to-t from-black to-transparent px-3 py-2 opacity-70">
+        <div className="flex items-center gap-2">
+          <BsHeart size={14} />
+          <span className="z-20 cursor-default text-sm text-white">
+            {peopleLiked.length}
+          </span>
+        </div>
       </div>
 
       <ViewModalPicture isOpen={isOpen} closeModal={closeModal} src={image} />
