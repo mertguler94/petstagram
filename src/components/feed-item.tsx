@@ -18,7 +18,7 @@ export const FeedItem = (image: Post) => {
     setIsOpen(true);
   }
 
-  const peopleLiked = (image.likedBy as Prisma.JsonArray) ?? [];
+  // const peopleLiked = (image.likedBy as Prisma.JsonArray) ?? [];
 
   return (
     <div
@@ -32,14 +32,15 @@ export const FeedItem = (image: Post) => {
         onClick={openModal}
         fill
       />
-      <div className="pointer-events-none z-10 flex items-end justify-end bg-gradient-to-t from-black to-transparent px-3 py-2 opacity-70">
+      {/* TODO: Add like count to the feed. */}
+      {/* <div className="pointer-events-none z-10 flex items-end justify-end bg-gradient-to-t from-black to-transparent px-3 py-2 opacity-70">
         <div className="flex items-center gap-2">
           <BsHeart size={14} />
           <span className="z-20 cursor-default text-sm text-white">
             {peopleLiked.length}
           </span>
         </div>
-      </div>
+      </div> */}
 
       <ViewModalPicture isOpen={isOpen} closeModal={closeModal} src={image} />
     </div>
