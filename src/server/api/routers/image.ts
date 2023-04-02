@@ -74,7 +74,9 @@ export const imageRouter = createTRPCRouter({
 
       let newPeopleLiked = [...peopleLiked] as Prisma.JsonArray;
       if (input.like) {
-        newPeopleLiked.push(input.userId);
+        const peopleSet = new Set(newPeopleLiked);
+        peopleSet.add(input.userId);
+        newPeopleLiked = Array.from(peopleSet);
       } else {
         console.log("else statement");
 
