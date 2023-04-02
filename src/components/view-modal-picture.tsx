@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type RouterOutputs, api } from "~/utils/api";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import dayjs from "dayjs";
@@ -9,6 +9,8 @@ import { getFullName } from "~/helpers/get-full-name";
 import { useRouter } from "next/router";
 import { IoPawOutline, IoPawSharp } from "react-icons/io5";
 import { tap } from "~/helpers/tap";
+import { useUser } from "@clerk/nextjs";
+import { type Prisma } from "@prisma/client";
 
 dayjs.extend(relativeTime);
 
@@ -29,10 +31,49 @@ export const ViewModalPicture = ({
     userId: src.userId,
   });
 
+  const ctx = api.useContext();
+
+  const { mutate: mutateLike, isLoading: isLikeLoading } =
+    api.image.likeToggle.useMutation({
+      onSuccess: () => {
+        void ctx.image.getAll.invalidate();
+      },
+      onError: (e) => {
+        const errorMessage = e.data?.zodError?.fieldErrors.content;
+        console.error(errorMessage);
+      },
+    });
+
   const [like, setLike] = useState(false);
   const [likeAnimation, setLikeAnimation] = useState(false);
+  const [likeNumber, setLikeNumber] = useState(0);
+
+  const { user } = useUser();
 
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchLike = () => {
+      const postId = src.id;
+      const loggedInUserId = user?.id;
+      if (!loggedInUserId) return;
+      mutateLike({ like, postId, userId: loggedInUserId });
+    };
+
+    fetchLike();
+  }, [like, mutateLike, src.id, user?.id]);
+
+  useEffect(() => {
+    const peopleLiked = src.likedBy as Prisma.JsonArray;
+    if (!peopleLiked) {
+      setLike(false);
+      return;
+    }
+    setLikeNumber(peopleLiked.length);
+    if (!user) return;
+    const isLiked = peopleLiked.find((personId) => personId === user.id);
+    setLike(!!isLiked);
+  }, [src.likedBy, user]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -118,17 +159,26 @@ export const ViewModalPicture = ({
                   </div>
                   <div className="flex items-center justify-between">
                     {src.caption && <p className="text-black">{src.caption}</p>}
+                    <span className="text-slate-800">{`${likeNumber} likes`}</span>
                     {like ? (
                       <IoPawSharp
                         size={36}
                         className="cursor-pointer rounded-full border border-red-400 p-1 text-red-700 hover:text-red-500"
-                        onClick={() => setLike((prev) => !prev)}
+                        onClick={
+                          !isLikeLoading
+                            ? () => setLike((prev) => !prev)
+                            : undefined
+                        }
                       />
                     ) : (
                       <IoPawOutline
                         size={36}
                         className="cursor-pointer rounded-full border border-red-400 p-1 text-red-700  hover:text-red-500"
-                        onClick={() => setLike((prev) => !prev)}
+                        onClick={
+                          !isLikeLoading
+                            ? () => setLike((prev) => !prev)
+                            : undefined
+                        }
                       />
                     )}
                   </div>

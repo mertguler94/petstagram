@@ -1,3 +1,5 @@
+import { type Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
@@ -44,6 +46,46 @@ export const imageRouter = createTRPCRouter({
         where: {
           userId: input.userId,
         },
+      });
+    }),
+
+  likeToggle: privateProcedure
+    .input(
+      z.object({ userId: z.string(), postId: z.string(), like: z.boolean() })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: {
+          id: input.postId,
+        },
+      });
+
+      if (!post) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Post not found",
+        });
+      }
+
+      let peopleLiked = post.likedBy as Prisma.JsonArray;
+      if (!peopleLiked) {
+        peopleLiked = [];
+      }
+
+      let newPeopleLiked = [...peopleLiked] as Prisma.JsonArray;
+      if (input.like) {
+        newPeopleLiked.push(input.userId);
+      } else {
+        console.log("else statement");
+
+        newPeopleLiked = peopleLiked.filter((id) => id !== input.userId);
+      }
+
+      return ctx.prisma.post.update({
+        where: {
+          id: input.postId,
+        },
+        data: { likedBy: newPeopleLiked },
       });
     }),
 });

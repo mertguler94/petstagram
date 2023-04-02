@@ -15,5 +15,7 @@ model Post {
   caption   String?
   userId    String
 
+  likedBy   Json?  
+
   @@index([userId])
 }
