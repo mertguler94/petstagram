@@ -3,19 +3,18 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  postUrl   String
-  caption   String?
-  userId    String
+  id        String   @id(map: "idx_28710_PRIMARY") @default(cuid()) @db.VarChar(191)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  postUrl   String   @db.VarChar(191)
+  caption   String?  @db.VarChar(191)
+  userId    String   @db.VarChar(191)
+  likedBy   Json?    @db.Json
 
-  likedBy   Json?  
-
-  @@index([userId])
+  @@index([userId], map: "idx_28710_Post_userId_idx")
 }
